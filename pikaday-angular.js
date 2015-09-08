@@ -35,7 +35,8 @@
 
       restrict: 'A',
       scope: {
-        pikaday: '=', onSelect: '&', onOpen: '&', onClose: '&', onDraw: '&', disableDayFn: '&'
+        pikaday: '=', onSelect: '&', onOpen: '&', onClose: '&', onDraw: '&', disableDayFn: '&',
+        pickerModel:"="
       },
       link: function (scope, elem, attrs) {
 
@@ -92,6 +93,8 @@
                 setTimeout(function(){
                   scope.$apply();
                 });
+                if(attr=="onSelect")
+                scope.pickerModel=date;
                 return scope[attr]({ pikaday: this, date: date });
               };
               break;
@@ -135,6 +138,7 @@
         // instantiate pikaday with config, bind to scope, add destroy event callback
 
         var picker = new Pikaday(config);
+        picker.setDate(scope.pickerModel instanceof Date?scope.pickerModel:new Date(scope.pickerModel));
         scope.pikaday = picker;
         scope.$on('$destroy', function () {
           picker.destroy();
