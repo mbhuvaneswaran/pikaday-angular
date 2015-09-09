@@ -34,10 +34,22 @@
     return {
 
       restrict: 'A',
+      require:'ngModel',
       scope: {
         pikaday: '=', onSelect: '&', onOpen: '&', onClose: '&', onDraw: '&', disableDayFn: '&',ngModel:"="
       },
-      link: function (scope, elem, attrs) {
+      link: function (scope, elem, attrs,modelCtrl) {
+
+
+        modelCtrl.$formatters.push(function(value){
+          return value instanceof Date?value:new Date(value)
+        })
+        modelCtrl.$parsers.push(function(value){
+          return new Date(value);
+        })
+        modelCtrl.$render=function(val){
+          debugger
+        }
 
         // Init config Object
 
@@ -133,13 +145,15 @@
         }
 
         // instantiate pikaday with config, bind to scope, add destroy event callback
-
+        if(scope.ngModel){
+          config.defaultDate=new Date(scope.ngModel)
+        }
         var picker = new Pikaday(config);
-        picker.setDate(scope.ngModel instanceof Date?scope.ngModel:new Date(scope.ngModel));
         scope.pikaday = picker;
         scope.$on('$destroy', function () {
           picker.destroy();
         });
+
       }
     };
   }
