@@ -40,16 +40,9 @@
       },
       link: function (scope, elem, attrs,modelCtrl) {
 
-
-        modelCtrl.$formatters.push(function(value){
-          return value instanceof Date?value:new Date(value)
-        })
         modelCtrl.$parsers.push(function(value){
           return new Date(value);
         })
-        modelCtrl.$render=function(val){
-          debugger
-        }
 
         // Init config Object
 
